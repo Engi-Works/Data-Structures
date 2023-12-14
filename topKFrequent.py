@@ -1,32 +1,23 @@
 class Solution:
     def topKFrequent(self, nums: list[int], k: int) -> list[int]:
         
-        nums.sort()
+        mapList = dict()
+        
+        for i in nums:
+            if i not in mapList.keys():
+                mapList.update({i : 0})
+                
+            elif i in mapList.keys():
+                val = mapList.get(i) + 1
+                mapList.update({ i : val })
+                
         count = 1
-        answer = dict()
-
-        for i in range(0 , len(nums) - 1):
-            
-            if nums[i] == nums[i+1]:
-                count += 1
-            
-            elif nums[i] != nums[i+1]:
-                    answer[nums[i]] = count
-                    count = 1
-            
-            if k < len(answer):
-                for key , value in dict(answer).items():
-                    if value == min(answer.values()):
-                        del answer[key]
-                        continue
+        ansList = list()
+        for key,value  in sorted(mapList.items() , key=lambda item:item[1] , reverse=True):
+            ansList.append(key)
+            count += 1
+            if count > k:
+                break
             
         
-        ansList = list(answer.keys())
         return ansList
-        
-#Test
-array = [1 , 2 , 3 , 1 , 4 , 2 , 1]
-
-myObj = Solution()
-
-print(myObj.topKFrequent(array , 3))
